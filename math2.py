@@ -1,0 +1,12 @@
+import math
+a = input('täljare 1 ')
+b = input('nämnare 1 ')
+c = input('täljare 2 ')
+d = input('nämnare 2 ')
+e = input('täljare 3 ')
+f = input('nämnare 3 ')
+ans1 = (float(a)/float(b))
+ans2 = (float(c)/float(d))
+ans3 = (float(e)/float(f))
+final = (ans1 + ans2 + ans3)
+print(final,"/1")

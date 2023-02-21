@@ -1,0 +1,2 @@
+@echo hejsan
+@pause

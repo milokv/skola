@@ -1,0 +1,162 @@
+import turtle
+import random
+import time
+from turtle import Turtle
+
+player_score = 0
+highest_score = 0
+delay_time = 0.1
+
+# creating window
+wind = turtle.Screen()
+wind.title("Snake Game")
+wind.bgcolor("green")
+
+# window size
+wind.setup(width=600, height=600)
+
+# snake
+snake = turtle.Turtle()
+snake.shape("square")
+snake.color("black")
+snake.penup()
+snake.goto(0, 0)
+snake.direction = "Stop"
+
+# creating food
+snake_food = turtle.Turtle()
+snake_food.shape('circle')
+snake_food.color("blue")
+snake_food.speed(0)
+snake_food.penup()
+snake_food.goto(0, 100)
+
+pen = turtle.Turtle()
+pen.speed(0)
+pen.shape('square')
+pen.color('white')
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 250)
+pen.write("Your_Score: 0 Highest_Score: 0", align="center", font=("Ariel", 24, "normal"))
+turtle.mainloop()
+
+
+# assigning directions
+
+def moveleft():
+    if snake.direction != "right":
+        snake.direction = "left"
+
+
+def moveright():
+    if snake.direction != "left":
+        snake.direction = "right"
+
+
+def moveup():
+    if snake.direction != "down":
+        snake.direction = "up"
+
+
+def movedown():
+    if snake.direction != "up":
+        snake.direction = "down"
+
+
+def move():
+    if snake.direction == "up":
+        coord_y = snake.ycor()
+        snake.sety(coord_y + 20)
+
+    if snake.direction == "down":
+        coord_y = snake.ycor()
+        snake.sety(coord_y - 20)
+
+    if snake.direction == "right":
+        coord_x = snake.xcor()
+        snake.sety(coord_x + 20)
+
+    if snake.direction == "left":
+        coord_x = snake.xcor()
+        snake.sety(coord_x - 20)
+
+
+wind.listen()
+wind.onkeypress(moveleft(), 'A')
+wind.onkeypress(moveright(), 'D')
+wind.onkeypress(moveup(), 'W')
+wind.onkeypress(movedown(), 'S')
+
+segments = []
+
+# implementing the gameplay
+while True:
+    wind.update()
+    if snake.xcor() > 290 or snake.xcor() < -290 or snake.ycor() > 290 or snake.ycor() < -290:
+        time.sleep(1)
+        snake.goto(0, 0)
+        snake.direction = "Stop"
+        snake.shape("square")
+        snake.color("green")
+
+        for segment in segments:
+            segment.goto(1000, 1000)
+            segments.clear()
+            player_score = 0
+            delay_time = 0.1
+            pen.clear()
+            pen.write("Player's_score: {} Highest_score: {}".format(player_score, highest_score), align="center",
+                      font=("Ariel", 24, "normal"))
+        if snake.distance(snake_food) < 20:
+            coord_x = random.randint(-270, 270)
+            coord_y = random.randint(-270, 270)
+            snake_food.goto(coord_x, coord_y)
+
+            # Adding segment
+            added_segment = turtle.Turtle()
+            added_segment.speed(0)
+            added_segment.shape("square")
+            added_segment.color("white")
+            added_segment.penup()
+            segments.append(added_segment)
+            delay_time -= 0.001
+            player_score += 5
+
+            if player_score > highest_score:
+                highest_score = player_score
+                pen.clear()
+                pen.write("Player's_score: {} Highest_score {}".format(player_score, highest_score), align="center",
+                          font=("Arial", 24, "normal"))
+
+    # checking for collisions
+    for i in range(len(segments)-1, 0, -1):
+        coord_x = segments[i-1].xcor()
+        coord_y = segments[i-1].ycor()
+        segments[i].goto(coord_x, coord_y)
+    if len(segments) > 0:
+        coord_x = snake.xcor()
+        coord_y = snake.ycor()
+        segments[0].goto(coord_x, coord_y)
+    move()
+
+    for segment in segments:
+        if segment.distance(snake) < 20:
+            time.sleep(1)
+            snake.goto(0, 0)
+            snake.direction = "stop"
+            snake.color('white')
+            snake.shape('square')
+
+            f: Turtle
+            for f in segments:
+                f.goto(1000, 1000)
+                f.clear()
+                player_score = 0
+                delay_time = 0.1
+                pen.clear()
+                pen.write(f"Player's_score: {player_score} Highest_score: {highest_score}", align="center",
+                          font=("Arial", 24, "normal"))
+    time.sleep(delay_time)
+
+turtle.mainloop()

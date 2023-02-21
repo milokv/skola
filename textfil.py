@@ -1,0 +1,17 @@
+skriv = input("skriv va du vill skriva\n")
+b = open("textfile.txt", "a")
+b.write(skriv)
+b = open("textfile.txt", "r")
+print("Din textfil:" + " " + b.read())
+b.close()
+abcdef = input("ta bort allt? y/n")
+if abcdef == "y":
+    b = open("textfile.txt", "w")
+    b.write("")
+    print("Din nya textfil:")
+    b = open("textfile.txt", "r")
+    print(b.read())
+    b.close()
+else:
+    c = open("textfile.txt", "r")
+    print("Din nya text:" + " " + c.read())
